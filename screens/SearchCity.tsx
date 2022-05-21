@@ -4,13 +4,15 @@ import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { APIKey } from "../library/Types";
 import { useState, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
+import ErrorMessage from "../components/ErrorMessage";
+import Loading from "../components/Loading";
 
 const SearchCity = ({ navigation }: NativeStackHeaderProps) => {
   const [city, setCity] = useState([]);
   const [input, setInput] = useState("");
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState<boolean>();
+  const [error, setError] = useState<string>(String);
 
   const getCity = async () => {
     setLoading(true);
@@ -37,6 +39,16 @@ const SearchCity = ({ navigation }: NativeStackHeaderProps) => {
     }
     setLoading(false);
   };
+
+  // render error message
+  if (error && !loading) {
+    return <ErrorMessage message={error} />;
+  }
+
+  // show loading status
+  if (loading) {
+    return <Loading />;
+  }
 
   const DisplayPopulation = () => {
     getCity();

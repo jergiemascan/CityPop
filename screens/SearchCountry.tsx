@@ -1,15 +1,17 @@
 import { AntDesign } from "@expo/vector-icons";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import axios from "axios";
-import { useState } from "react";
+import axios, { AxiosError } from "axios";
+import { useState, useEffect } from "react";
 import { TextInput, TouchableOpacity, View, Text } from "react-native";
+import ErrorMessage from "../components/ErrorMessage";
+import Loading from "../components/Loading";
 
 const SearchCountry = ({ navigation }: NativeStackHeaderProps) => {
   const [country, setCountry] = useState([]);
   const [value, setValue] = useState("");
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState<boolean>();
+  const [error, setError] = useState<string>(String);
 
   const getCountry = async () => {
     setLoading(true);
@@ -20,19 +22,28 @@ const SearchCountry = ({ navigation }: NativeStackHeaderProps) => {
       );
 
       setCountry(res?.data?.data);
-      // console.log(res?.data?.data)
-
-      if (res?.data.length === 0) {
+      console.log(res?.data?.data);
+      if (res.data.data.length === 0) {
         setError("No country found with that name");
-      } else if (!res?.error) {
+      } else if (!res?.data?.data.error) {
         navigation.navigate("Cities", { city: res.data.data });
       }
     } catch (error) {
-      setError("Failed to fetch country");
+      setError("No country found with that name");
       console.log(error);
     }
     setLoading(false);
   };
+
+  // displaying error message
+  if (error && !loading) {
+    return <ErrorMessage message={error} />;
+  }
+
+  // show loading status
+  if (loading) {
+    return <Loading />;
+  }
 
   const showCountry = () => {
     getCountry();
@@ -49,7 +60,7 @@ const SearchCountry = ({ navigation }: NativeStackHeaderProps) => {
           value={value}
           placeholderTextColor={"blue"}
           onChangeText={(inputText) => {
-            setValue(inputText);
+            setValue(inputText.trim());
           }}
         />
         <TouchableOpacity onPress={() => showCountry()}>

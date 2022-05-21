@@ -5,10 +5,10 @@ export default function CityPopulation(props: any) {
 
   return (
     <View>
-      {/* <View>
+      <View>
         <Text>{props?.route?.params.city?.city}</Text>
         <Text>{props?.route?.params.city?.populationCounts[0].value}</Text>
-      </View> */}
+      </View>
       <View>
         <Text>{props?.route?.params.city?.name}</Text>
         <Text>{props?.route?.params.city?.population}</Text>

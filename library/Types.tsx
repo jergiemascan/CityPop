@@ -7,3 +7,7 @@ export interface cityAndCountryInfo {
   iso2: string;
   city: string;
 }
+
+export interface errorMessage {
+  message: string;
+}

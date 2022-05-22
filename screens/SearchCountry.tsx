@@ -1,10 +1,11 @@
 import { AntDesign } from "@expo/vector-icons";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import axios, { AxiosError } from "axios";
-import { useState, useEffect } from "react";
+import axios from "axios";
+import { useState } from "react";
 import { TextInput, TouchableOpacity, View, Text } from "react-native";
 import ErrorMessage from "../components/ErrorMessage";
 import Loading from "../components/Loading";
+import { styles } from "../library/Style";
 
 const SearchCountry = ({ navigation }: NativeStackHeaderProps) => {
   const [country, setCountry] = useState([]);
@@ -18,15 +19,37 @@ const SearchCountry = ({ navigation }: NativeStackHeaderProps) => {
     try {
       const res = await axios.post(
         "https://countriesnow.space/api/v0.1/countries/population/cities/filter",
-        { country: value, order: "asc", limit: 3 }
+        { country: value, order: "asc" }
       );
 
-      setCountry(res?.data?.data);
-      console.log(res?.data?.data);
+      setCountry(
+        res?.data?.data
+          ?.sort(
+            (a, b) => b.populationCounts[0]?.value < a.populationCounts[0].value
+          )
+          .splice(0, 3)
+      );
+
+      // console.log(
+      //   res?.data?.data
+      //     ?.sort(
+      //       (a, b) => b.populationCounts[0]?.value - a.populationCounts[0].value
+      //     )
+      //     .splice(0, 3),
+      //   "data"
+      // );
+      // console.log(res?.data?.data);
       if (res.data.data.length === 0) {
         setError("No country found with that name");
       } else if (!res?.data?.data.error) {
-        navigation.navigate("Cities", { city: res.data.data });
+        navigation.navigate("Cities", {
+          city: res?.data?.data
+            ?.sort(
+              (a, b) =>
+                b.populationCounts[0]?.value - a.populationCounts[0].value
+            )
+            .splice(0, 3),
+        });
       }
     } catch (error) {
       setError("No country found with that name");
@@ -46,16 +69,20 @@ const SearchCountry = ({ navigation }: NativeStackHeaderProps) => {
   }
 
   const showCountry = () => {
-    getCountry();
+    if (!value) {
+      setError("Please enter a country");
+    } else {
+      getCountry();
+    }
   };
 
   return (
-    <View>
-      <View>
-        <Text>Search by Country</Text>
-      </View>
-      <View>
+    <View style={styles.screenContainer}>
+      <Text style={styles.h2}>Search by Country</Text>
+
+      <View style={styles.searchContainer}>
         <TextInput
+          style={styles.search}
           placeholder="Enter a country"
           value={value}
           placeholderTextColor={"blue"}
@@ -63,8 +90,14 @@ const SearchCountry = ({ navigation }: NativeStackHeaderProps) => {
             setValue(inputText.trim());
           }}
         />
+
         <TouchableOpacity onPress={() => showCountry()}>
-          <AntDesign name="search1" size={28} color="black" />
+          <AntDesign
+            name="search1"
+            size={28}
+            color="black"
+            style={styles.icon}
+          />
         </TouchableOpacity>
       </View>
     </View>

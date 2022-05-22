@@ -6,6 +6,7 @@ export interface cityAndCountryInfo {
   country: string;
   iso2: string;
   city: string;
+  populationCounts: number;
 }
 
 export interface errorMessage {

@@ -1,11 +1,11 @@
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import axios from "axios";
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { APIKey } from "../library/Types";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import ErrorMessage from "../components/ErrorMessage";
 import Loading from "../components/Loading";
+import { styles } from "../library/Style";
 
 const SearchCity = ({ navigation }: NativeStackHeaderProps) => {
   const [city, setCity] = useState([]);
@@ -26,7 +26,7 @@ const SearchCity = ({ navigation }: NativeStackHeaderProps) => {
       );
       const res = await response.json();
       setCity(res);
-      console.log(res);
+      // console.log(res);
 
       if (res.length === 0) {
         setError("No city found with that name");
@@ -51,16 +51,20 @@ const SearchCity = ({ navigation }: NativeStackHeaderProps) => {
   }
 
   const DisplayPopulation = () => {
-    getCity();
+    if (!input) {
+      setError("Please enter a city");
+    } else {
+      getCity();
+    }
   };
 
   return (
-    <View>
-      <View>
-        <Text>Search by city</Text>
-      </View>
-      <View>
+    <View style={styles.screenContainer}>
+      <Text style={styles.h2}>Search by city</Text>
+
+      <View style={styles.searchContainer}>
         <TextInput
+          style={styles.search}
           value={input}
           placeholder="Enter a city"
           placeholderTextColor={"blue"}
@@ -69,7 +73,12 @@ const SearchCity = ({ navigation }: NativeStackHeaderProps) => {
           }}
         />
         <TouchableOpacity onPress={() => DisplayPopulation()}>
-          <AntDesign name="search1" size={28} color="black" />
+          <AntDesign
+            name="search1"
+            size={28}
+            color="black"
+            style={styles.icon}
+          />
         </TouchableOpacity>
       </View>
     </View>

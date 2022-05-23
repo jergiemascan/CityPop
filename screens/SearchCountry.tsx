@@ -25,19 +25,14 @@ const SearchCountry = ({ navigation }: NativeStackHeaderProps) => {
       setCountry(
         res?.data?.data
           ?.sort(
-            (a, b) => b.populationCounts[0]?.value < a.populationCounts[0].value
+            (
+              a: { populationCounts: { value: number }[] },
+              b: { populationCounts: { value: number }[] }
+            ) => b.populationCounts[0]?.value < a.populationCounts[0].value
           )
           .splice(0, 3)
       );
 
-      // console.log(
-      //   res?.data?.data
-      //     ?.sort(
-      //       (a, b) => b.populationCounts[0]?.value - a.populationCounts[0].value
-      //     )
-      //     .splice(0, 3),
-      //   "data"
-      // );
       // console.log(res?.data?.data);
       if (res.data.data.length === 0) {
         setError("No country found with that name");
@@ -45,8 +40,10 @@ const SearchCountry = ({ navigation }: NativeStackHeaderProps) => {
         navigation.navigate("Cities", {
           city: res?.data?.data
             ?.sort(
-              (a, b) =>
-                b.populationCounts[0]?.value - a.populationCounts[0].value
+              (
+                a: { populationCounts: { value: number }[] },
+                b: { populationCounts: { value: number }[] }
+              ) => b.populationCounts[0]?.value - a.populationCounts[0].value
             )
             .splice(0, 3),
         });
@@ -74,6 +71,7 @@ const SearchCountry = ({ navigation }: NativeStackHeaderProps) => {
     } else {
       getCountry();
     }
+    setValue("");
   };
 
   return (

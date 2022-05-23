@@ -1,4 +1,3 @@
-import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { cityAndCountryInfo } from "../library/Types";
 import { styles } from "../library/Style";
@@ -17,8 +16,6 @@ export default function Cities(props: any) {
       </View>
     );
   };
-
-  console.log(props?.route?.params.city);
 
   return (
     <View style={styles.screenContainer}>

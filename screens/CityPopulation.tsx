@@ -2,8 +2,6 @@ import { View, Text } from "react-native";
 import { styles } from "../library/Style";
 
 export default function CityPopulation(props: any) {
-  // console.log(props?.route?.params, "yyyy");
-
   return (
     <View style={styles.screenContainer}>
       {props?.route?.params?.city?.city && (

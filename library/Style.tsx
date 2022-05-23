@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+
 export const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
@@ -13,6 +14,7 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "uppercase",
     textAlign: "center",
+    fontFamily: "serif",
   },
   btnContainer: {
     marginVertical: 30,
@@ -25,7 +27,6 @@ export const styles = StyleSheet.create({
   customizedBtn: {
     marginVertical: 4,
     backgroundColor: "#009688",
-
     paddingVertical: 10,
     color: "#fff",
     fontSize: 16,
@@ -43,6 +44,7 @@ export const styles = StyleSheet.create({
   search: {
     padding: 6,
     fontSize: 16,
+    fontFamily: "serif",
     textAlign: "center",
     borderColor: "#000",
     borderWidth: 1,
@@ -64,6 +66,7 @@ export const styles = StyleSheet.create({
   population: {
     fontSize: 18,
     marginTop: 5,
+    fontFamily: "serif",
   },
   errorMessageContainer: {
     alignItems: "center",

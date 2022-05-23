@@ -9,7 +9,7 @@ import { styles } from "../library/Style";
 
 const SearchCity = ({ navigation }: NativeStackHeaderProps) => {
   const [city, setCity] = useState([]);
-  const [input, setInput] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   const [loading, setLoading] = useState<boolean>();
   const [error, setError] = useState<string>(String);
@@ -18,7 +18,7 @@ const SearchCity = ({ navigation }: NativeStackHeaderProps) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://api.api-ninjas.com/v1/city?name=${input}`,
+        `https://api.api-ninjas.com/v1/city?name=${inputValue}`,
         {
           method: "GET",
           headers: { "X-Api-Key": APIKey },
@@ -27,7 +27,6 @@ const SearchCity = ({ navigation }: NativeStackHeaderProps) => {
       const res = await response.json();
       setCity(res);
       // console.log(res);
-
       if (res.length === 0) {
         setError("No city found with that name");
       } else if (!res?.error) {
@@ -51,11 +50,12 @@ const SearchCity = ({ navigation }: NativeStackHeaderProps) => {
   }
 
   const DisplayPopulation = () => {
-    if (!input) {
+    if (!inputValue) {
       setError("Please enter a city");
     } else {
       getCity();
     }
+    setInputValue("");
   };
 
   return (
@@ -65,11 +65,11 @@ const SearchCity = ({ navigation }: NativeStackHeaderProps) => {
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.search}
-          value={input}
+          value={inputValue}
           placeholder="Enter a city"
           placeholderTextColor={"blue"}
           onChangeText={(inputText) => {
-            setInput(inputText);
+            setInputValue(inputText);
           }}
         />
         <TouchableOpacity onPress={() => DisplayPopulation()}>
